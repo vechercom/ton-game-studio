@@ -1,0 +1,42 @@
+#include "C:/Users/lll/AppData/Local/toncli/toncli/func-libs/stdlib.func";
+
+;; Глобальная переменная для хранения словаря (ячейка)
+global cell games;
+
+;; Инициализация: если games ещё не установлена, создаём пустую ячейку
+() init() {
+    if (games.null?()) {
+        builder b = begin_cell();
+        games = b.end_cell();
+    }
+}
+
+;; Функция для получения сообщения
+() recv_internal(int msg_value, cell in_msg, slice in_msg_body) impure {
+    ;; Проверяем, что в сообщении есть данные
+    if (in_msg_body.slice_bits() >= 8) {
+        ;; Извлекаем первые 32 бита из slice как ключ
+        int key_int = in_msg_body~load_uint(32);
+        ;; Преобразуем ключ из int в slice
+        builder key_builder = begin_cell();
+        key_builder = key_builder.store_uint(key_int, 32);
+        slice key_slice = key_builder.end_cell().begin_parse();
+        ;; Преобразуем in_msg из cell в slice
+        slice msg_slice = in_msg.begin_parse();
+        ;; Получаем адрес отправителя
+        slice sender = msg_slice~load_msg_addr();
+        ;; Создаём builder для хранения адреса отправителя
+        builder b = begin_cell();
+        b = b.store_slice(sender);
+        ;; Преобразуем builder в cell, а затем в slice
+        cell value_cell = b.end_cell();
+        slice value_slice = value_cell.begin_parse();
+        ;; Добавляем в словарь: ключ — первые 32 бита названия в формате slice, значение — адрес отправителя
+        games~dict_set(256, key_slice, value_slice);
+    }
+}
+
+;; Функция для получения списка игр
+cell get_games() method_id {
+    return games;
+}

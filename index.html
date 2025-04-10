@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TON Game Studio - Upload & Publish Web3 Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+        
+        .pixel-font {
+            font-family: 'VT323', monospace;
+        }
+        
+        .title-font {
+            font-family: 'Press Start 2P', cursive;
+        }
+        
+        .pixel-border {
+            border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M0 0h4v4H0zM4 4h4v4H4z' fill='%2342b983'/%3E%3C/svg%3E") 4;
+            border-style: solid;
+            border-width: 4px;
+        }
+        
+        .pixel-button {
+            position: relative;
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+            transition: all 0.1s ease;
+        }
+        
+        .pixel-button:active {
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.75);
+            transform: translate(2px, 2px);
+        }
+        
+        .pixel-card {
+            box-shadow: 8px 8px 0px 0px rgba(0,0,0,0.75);
+            transition: all 0.2s ease;
+        }
+        
+        .pixel-card:hover {
+            box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.75);
+            transform: translate(4px, 4px);
+        }
+        
+        .grid-pattern {
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .scanlines {
+            background-image: linear-gradient(
+                rgba(0, 0, 0, 0.3) 1px, 
+                transparent 1px
+            );
+            background-size: 100% 2px;
+        }
+        
+        .glow {
+            text-shadow: 0 0 8px rgba(66, 185, 131, 0.8);
+        }
+        
+        .pixel-loader {
+            width: 16px;
+            height: 16px;
+            background-color: #42b983;
+            position: relative;
+            animation: pixel-loader 1s infinite steps(1);
+        }
+        
+        @keyframes pixel-loader {
+            0% { transform: translate(0,0) }
+            25% { transform: translate(24px,0) }
+            50% { transform: translate(24px,24px) }
+            75% { transform: translate(0,24px) }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 grid-pattern scanlines min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-gray-800 pixel-border sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-green-500 pixel-border"></div>
+                <h1 class="text-xl title-font glow">TON GAME STUDIO</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="connectWalletBtn" class="pixel-font bg-green-600 hover:bg-green-700 text-white px-4 py-2 pixel-button">
+                    <i class="fas fa-wallet mr-2"></i>Connect Wallet
+                </button>
+                <div class="relative">
+                      <img src="./assets/profile.png" alt="Profile" class="w-8 h-8 rounded-full cursor-pointer pixel-border" id="profileDropdownBtn">                    <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-50 pixel-border">
+                        <div class="py-1">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 pixel-font">My Profile</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 pixel-font">My Projects</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 pixel-font">Settings</a>
+                            <div class="border-t border-gray-700"></div>
+                            <a href="#" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-700 pixel-font">Sign Out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section class="mb-12 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 title-font glow">Build & Publish Web3 Games</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto pixel-font">
+                Upload your HTML5, WebAssembly, or executable games to the TON blockchain. 
+                Monetize with Toncoin and NFTs while keeping true ownership of your creations.
+            </p>
+            <div class="flex justify-center space-x-4">
+                <button class="pixel-font bg-green-600 hover:bg-green-700 text-white px-6 py-3 text-lg pixel-button">
+                    <i class="fas fa-rocket mr-2"></i>Get Started
+                </button>
+                <button class="pixel-font bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 text-lg pixel-button">
+                    <i class="fas fa-book mr-2"></i>Documentation
+                </button>
+            </div>
+        </section>
+
+        <!-- Upload Section -->
+        <section class="mb-16 bg-gray-800 rounded-lg p-6 pixel-border">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl pixel-font">Upload New Game</h3>
+                <div class="flex space-x-2">
+                    <button id="testBtn" class="pixel-font bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 pixel-button" disabled>
+                        <i class="fas fa-vial mr-2"></i>Test
+                    </button>
+                    <button id="publishBtn" class="pixel-font bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 pixel-button" disabled>
+                        <i class="fas fa-cloud-upload-alt mr-2"></i>Publish
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Game Info Form -->
+                <div class="md:col-span-1 bg-gray-700 p-4 rounded-lg pixel-border">
+                    <h4 class="text-lg mb-4 pixel-font border-b border-gray-600 pb-2">Game Details</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1 pixel-font">Game Title</label>
+                            <input type="text" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded pixel-font" placeholder="My Awesome Game">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1 pixel-font">Description</label>
+                            <textarea class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded pixel-font" rows="3" placeholder="Describe your game..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1 pixel-font">Genre</label>
+                            <select class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded pixel-font">
+                                <option>Action</option>
+                                <option>Adventure</option>
+                                <option>RPG</option>
+                                <option>Strategy</option>
+                                <option>Puzzle</option>
+                                <option>Simulation</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1 pixel-font">Tags</label>
+                            <input type="text" class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded pixel-font" placeholder="space, roguelike, pixel-art">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- File Upload -->
+                <div class="md:col-span-2 bg-gray-700 p-4 rounded-lg pixel-border">
+                    <h4 class="text-lg mb-4 pixel-font border-b border-gray-600 pb-2">Upload Files</h4>
+                    <div class="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center cursor-pointer hover:border-green-500 transition" id="dropZone">
+                        <i class="fas fa-cloud-upload-alt text-4xl mb-4 text-gray-500"></i>
+                        <p class="mb-2 pixel-font">Drag & drop your game files here</p>
+                        <p class="text-sm text-gray-400 mb-4 pixel-font">Supports HTML5, WebAssembly, or executables</p>
+                        <button class="pixel-font bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 pixel-button">
+                            <i class="fas fa-folder-open mr-2"></i>Browse Files
+                        </button>
+                        <input type="file" id="fileInput" class="hidden" multiple>
+                    </div>
+                    
+                    <div id="fileList" class="mt-4 hidden">
+                        <h5 class="text-md mb-2 pixel-font">Uploaded Files:</h5>
+                        <ul class="space-y-2" id="uploadedFiles">
+                            <!-- Files will be listed here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="text-lg mb-2 pixel-font border-b border-gray-600 pb-2">Monetization Settings</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-800 p-3 rounded pixel-border">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-green-500">
+                                    <span class="pixel-font">Pay-to-Play</span>
+                                </label>
+                                <div class="mt-2 ml-6">
+                                    <label class="block text-sm mb-1 pixel-font">Price (TON)</label>
+                                    <input type="number" class="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded pixel-font" min="0" step="0.1" value="0.5">
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 p-3 rounded pixel-border">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-green-500">
+                                    <span class="pixel-font">NFT Assets</span>
+                                </label>
+                                <div class="mt-2 ml-6">
+                                    <label class="block text-sm mb-1 pixel-font">Collection Address</label>
+                                    <input type="text" class="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded pixel-font" placeholder="EQ...">
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 p-3 rounded pixel-border">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-green-500">
+                                    <span class="pixel-font">In-Game Purchases</span>
+                                </label>
+                                <div class="mt-2 ml-6">
+                                    <label class="block text-sm mb-1 pixel-font">Smart Contract Address</label>
+                                    <input type="text" class="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded pixel-font" placeholder="EQ...">
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 p-3 rounded pixel-border">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-green-500">
+                                    <span class="pixel-font">Ad Revenue Sharing</span>
+                                </label>
+                                <div class="mt-2 ml-6">
+                                    <label class="block text-sm mb-1 pixel-font">Revenue Split (%)</label>
+                                    <input type="number" class="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded pixel-font" min="0" max="100" value="50">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing Environment -->
+        <section class="mb-16 bg-gray-800 rounded-lg p-6 pixel-border hidden" id="testingSection">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl pixel-font">Testing Environment</h3>
+                <div class="flex space-x-2">
+                    <button class="pixel-font bg-green-600 hover:bg-green-700 text-white px-4 py-2 pixel-button">
+                        <i class="fas fa-play mr-2"></i>Run
+                    </button>
+                    <button class="pixel-font bg-red-600 hover:bg-red-700 text-white px-4 py-2 pixel-button">
+                        <i class="fas fa-stop mr-2"></i>Stop
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Game Preview -->
+                <div class="md:col-span-3 bg-black p-2 rounded-lg pixel-border">
+                    <div class="relative bg-gray-900 w-full aspect-video flex items-center justify-center">
+                        <div id="gamePreview" class="w-full h-full flex items-center justify-center">
+                            <p class="text-gray-500 pixel-font">Game preview will appear here</p>
+                        </div>
+                        <div id="gameLoading" class="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
+                            <div class="text-center">
+                                <div class="pixel-loader mx-auto mb-4"></div>
+                                <p class="pixel-font">Loading game...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testing Controls -->
+                <div class="md:col-span-1 bg-gray-700 p-4 rounded-lg pixel-border">
+                    <h4 class="text-lg mb-4 pixel-font border-b border-gray-600 pb-2">Testing Tools</h4>
+                    
+                    <div class="mb-6">
+                        <h5 class="text-md mb-2 pixel-font">TON Node Simulation</h5>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm mb-1 pixel-font">Network Speed</label>
+                                <select class="w-full px-2 py-1 bg-gray-800 border border-gray-600 rounded pixel-font">
+                                    <option>Fast (5G)</option>
+                                    <option>Medium (4G)</option>
+                                    <option>Slow (3G)</option>
+                                    <option>Very Slow (2G)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm mb-1 pixel-font">Latency</label>
+                                <input type="range" min="0" max="1000" value="50" class="w-full">
+                            </div>
+                            <div>
+                                <label class="block text-sm mb-1 pixel-font">Packet Loss</label>
+                                <input type="range" min="0" max="20" value="0" class="w-full">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h5 class="text-md mb-2 pixel-font">Test Wallet</h5>
+                        <div class="bg-gray-800 p-3 rounded mb-3">
+                            <p class="text-xs text-gray-400 pixel-font">Balance</p>
+                            <p class="text-lg pixel-font">100.5 <span class="text-green-500">TON</span></p>
+                        </div>
+                        <button class="w-full pixel-font bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 mb-2 pixel-button">
+                            <i class="fas fa-coins mr-2"></i>Get Test Tokens
+                        </button>
+                        <button class="w-full pixel-font bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 pixel-button">
+                            <i class="fas fa-exchange-alt mr-2"></i>Simulate Payment
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <h5 class="text-md mb-2 pixel-font">Smart Contract</h5>
+                        <div class="bg-gray-800 p-3 rounded mb-3">
+                            <p class="text-xs text-gray-400 pixel-font">Deployed At</p>
+                            <p class="text-sm break-all pixel-font">EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+                        </div>
+                        <button class="w-full pixel-font bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 mb-2 pixel-button">
+                            <i class="fas fa-file-code mr-2"></i>View Contract
+                        </button>
+                        <button class="w-full pixel-font bg-green-600 hover:bg-green-700 text-white px-3 py-2 pixel-button">
+                            <i class="fas fa-redo mr-2"></i>Redeploy
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 bg-gray-700 p-4 rounded-lg pixel-border">
+                <h4 class="text-lg mb-2 pixel-font border-b border-gray-600 pb-2">Console Output</h4>
+                <div class="bg-black p-3 rounded font-mono text-sm h-40 overflow-y-auto">
+                    <p class="text-green-400">> Initializing TON test node...</p>
+                    <p class="text-green-400">> Loading game files from IPFS...</p>
+                    <p class="text-green-400">> Smart contract deployed successfully!</p>
+                    <p class="text-yellow-400">> Warning: No NFT collection address provided</p>
+                    <p class="text-gray-400">> Ready to test your game!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Catalog -->
+        <section class="mb-16">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl pixel-font">Featured Games</h3>
+                <a href="#" class="text-green-400 hover:text-green-300 pixel-font">View All <i class="fas fa-arrow-right ml-1"></i></a>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Game Card 1 -->
+                <div class="bg-gray-800 rounded-lg overflow-hidden pixel-card cursor-pointer">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/400x225/42b983/000000?text=Space+Roguelike" alt="Game" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded pixel-font">NEW</div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="text-lg font-semibold mb-1 pixel-font">FTL: TON Edition</h4>
+                        <p class="text-gray-400 text-sm mb-3 pixel-font">Top-down space roguelike with blockchain integration</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-1">
+                                <span class="bg-gray-700 text-xs px-2 py-1 rounded pixel-font">Roguelike</span>
+                                <span class="bg-gray-700 text-xs px-2 py-1 rounded pixel-font">Space</span>
+                            </div>
+                            <div class="text-green-400 pixel-font">0.5 TON</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game Card 2 -->
+                <div class="bg-gray-800 rounded-lg overflow-hidden pixel-card cursor-pointer">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/400x225/4290b9/000000?text=Pixel+Adventure" alt="Game" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-1 rounded pixel-font">NFTs</div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="text-lg font-semibold mb-1 pixel-font">Crypto Quest</h4>
+                        <p class="text-gray-400 text-sm mb-3 pixel-font">Adventure game with NFT collectibles</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-1">
+                                <span class="bg-gray-700 text-xs px-2 py-1 rounded pixel-font">Adventure</span>
+                                <span class="bg-gray-700 text-xs px-2 py-1 rounded pixel-font">Pixel</span>
+                            </div>
+                            <div class="text-green-400 pixel-font">FREE</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game Card 3 -->
+                <div class="bg-gray-800 rounded-lg overflow-hidden pixel-card cursor-pointer">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/400x225/b9424e/000000?text=Blockchain+Defense" alt="Game" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-yellow-600 text-white text-xs px-2 py-1 rounded pixel-font">HOT</div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="text-lg font-semibold mb-1 pixel-font">TON Defense</h4>
+                        <p class="text-gray-400 text-sm mb-3 pixel-font">Tower defense game with TON integration</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-1">
+                                <span class="bg-gray-700 text-xs px-2 py-1 rounded pixel-font">Strategy</span>
+                                <span class="bg-gray-700 text-xs px-2 py-1 rounded pixel-font">Defense</span>
+                            </div>
+                            <div class="text-green-400 pixel-font">1.2 TON</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game Card 4 -->
+                <div class="bg-gray-800 rounded-lg overflow-hidden pixel-card cursor-pointer">
+                    <div class="relative">
+                        <img src="https://via.placeholder.com/400x225/8e42b9/000000?text=Metaverse+Racing" alt="Game" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded pixel-font">3D</div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="text-lg font-semibold mb-1 pixel-font">TON Racers</h4>
+                        <p class="text-gray-400 text-sm mb-3 pixel-font">Multiplayer racing with NFT cars</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-1">
+                                <span class="bg-gray-700 text-xs px-2 py-1 rounded pixel-font">Racing</span>
+                                <span class="bg-gray-700 text-xs px-2 py-1 rounded pixel-font">Multiplayer</span>
+                            </div>
+                            <div class="text-green-400 pixel-font">0.8 TON</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="mb-16">
+            <h3 class="text-2xl mb-8 text-center pixel-font">Why Publish on TON Game Studio?</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-gray-800 p-6 rounded-lg text-center pixel-border">
+                    <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-lock text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-2 pixel-font">True Ownership</h4>
+                    <p class="text-gray-400 pixel-font">Your games are stored on decentralized networks like IPFS and TON Storage, ensuring you maintain full control.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-gray-800 p-6 rounded-lg text-center pixel-border">
+                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-coins text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-2 pixel-font">Monetization Options</h4>
+                    <p class="text-gray-400 pixel-font">Earn Toncoin through pay-to-play, in-game purchases, NFT sales, or ad revenue sharing.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-gray-800 p-6 rounded-lg text-center pixel-border">
+                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold mb-2 pixel-font">Built-in Audience</h4>
+                    <p class="text-gray-400 pixel-font">Access millions of potential players through the TON ecosystem and Telegram's user base.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 pixel-border">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-green-500 pixel-border"></div>
+                        <h3 class="text-xl title-font">TON GAME STUDIO</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4 pixel-font">
+                        The premier platform for uploading, testing, and publishing blockchain games on TON.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-green-400"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-green-400"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 pixel-font border-b border-gray-700 pb-2">Developers</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Documentation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">API Reference</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Smart Contracts</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Tutorials</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 pixel-font border-b border-gray-700 pb-2">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Game Catalog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Community</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 pixel-font border-b border-gray-700 pb-2">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">Cookie Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-green-400 pixel-font">DMCA</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-500 text-sm pixel-font">© 2023 TON Game Studio. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Wallet Connection Modal -->
+    <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md pixel-border">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl pixel-font">Connect Wallet</h3>
+                <button id="closeWalletModal" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <button class="w-full flex items-center justify-between p-4 bg-gray-700 rounded-lg hover:bg-gray-600 pixel-font">
+                    <div class="flex items-center">
+                        <img src="https://ton.org/download/ton_symbol_old.png" alt="Tonkeeper" class="w-8 h-8 mr-3">
+                        <span>Tonkeeper</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <button class="w-full flex items-center justify-between p-4 bg-gray-700 rounded-lg hover:bg-gray-600 pixel-font">
+                    <div class="flex items-center">
+                        <img src="https://ton.org/download/ton_symbol_old.png" alt="TON Wallet" class="w-8 h-8 mr-3">
+                        <span>TON Wallet</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <button class="w-full flex items-center justify-between p-4 bg-gray-700 rounded-lg hover:bg-gray-600 pixel-font">
+                    <div class="flex items-center">
+                        <img src="https://ton.org/download/ton_symbol_old.png" alt="OpenMask" class="w-8 h-8 mr-3">
+                        <span>OpenMask</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <button class="w-full flex items-center justify-between p-4 bg-gray-700 rounded-lg hover:bg-gray-600 pixel-font">
+                    <div class="flex items-center">
+                        <i class="fas fa-bolt text-yellow-500 text-2xl mr-3"></i>
+                        <span>Test Wallet</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-400 pixel-font">By connecting, you agree to our Terms of Service</p>
+            </div>
+        </div>
+    </div>
+
+<!-- Wallet Connection Modal -->
+<div id="walletModal" class="fixed inset-0 ...">
+    <!-- ... содержимое модалки ... -->
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
